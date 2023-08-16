@@ -13,10 +13,10 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("贪吃蛇游戏")
 
 # 定义方向常量
-UP = (-10, 0)
-DOWN = (10, 0)
-LEFT = (0, -10)
-RIGHT = (0, 10)
+UP = (0, -10)
+DOWN = (0, 10)
+LEFT = (-10, 0)
+RIGHT = (10, 0)
 
 # 贪吃蛇移动的方向
 direction = RIGHT
@@ -47,6 +47,16 @@ while True:
                 change_to = LEFT
             if event.key == pygame.K_RIGHT:
                 change_to = RIGHT
+                
+    # 在更新蛇的位置之前
+    if snake_pos[0] >= width:
+        snake_pos[0] = 0
+    if snake_pos[0] < 0:
+        snake_pos[0] = width
+    if snake_pos[1] >= height:
+        snake_pos[1] = 0
+    if snake_pos[1] < 0:
+        snake_pos[1] = height
 
     new_pos = [snake_pos[0] + change_to[0], snake_pos[1] + change_to[1]]
     snake_body.insert(0, list(snake_pos))
@@ -65,5 +75,5 @@ while True:
     for pos in snake_body:
         pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(pos[0], pos[1], 10, 10))
     pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(food_pos[0], food_pos[1], 10, 10))
-
+    pygame.time.delay(50)
     pygame.display.flip()
