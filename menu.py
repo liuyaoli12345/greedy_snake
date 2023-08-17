@@ -42,8 +42,34 @@ def main_menu():
                 if event.key == pygame.K_1:
                     return "single_player"
                 if event.key == pygame.K_2:
-                    return "ai_battle"
+                    ai_battle_mode = ai_battle_menu()
+                    return "ai_battle", ai_battle_mode
+
+def ai_battle_menu():
+    while True:
+        screen.fill(WHITE)
+        font = game_font
+        
+        draw_text("选择AI对战模式", font, RED, screen, 240, 100)
+        draw_text("1. 愚蠢的敌人", font, RED, screen, 260, 200)
+        draw_text("2. 简单的敌人", font, RED, screen, 260, 250)
+        draw_text("3. 高级的敌人", font, RED, screen, 260, 300)
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    return "stupid"
+                if event.key == pygame.K_2:
+                    return "simple"
+                if event.key == pygame.K_3:
+                    return "advanced"
 
 if __name__ == "__main__":
     selected_mode = main_menu()
     print("用户选择的模式:", selected_mode)
+        
