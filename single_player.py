@@ -13,7 +13,10 @@ game_font = pygame.font.Font("./经典宋体简.ttf", 30)
 
 # 游戏主循环
 def start_game():
-    global UP, DOWN, LEFT, RIGHT
+    UP = (0, -10)
+    DOWN = (0, 10)
+    LEFT = (-10, 0)
+    RIGHT = (10, 0)
     # 贪吃蛇移动的方向
     direction = RIGHT
     change_to = direction
@@ -52,8 +55,8 @@ def start_game():
             snake_pos[1] = 0
         if snake_pos[1] < 0:
             snake_pos[1] = height
-
         new_pos = [snake_pos[0] + change_to[0], snake_pos[1] + change_to[1]]
+        # 碰撞检测：检查蛇头是否碰到自己的身体
         snake_body.insert(0, list(snake_pos))
         if snake_pos == food_pos:
             food_spawn = False
@@ -72,3 +75,24 @@ def start_game():
         pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(food_pos[0], food_pos[1], 10, 10))
         pygame.time.delay(100)
         pygame.display.flip()
+        if new_pos in snake_body[1:]:
+            # 处理碰撞逻辑（游戏结束等）
+            game_over(screen, len(snake_body))
+            return
+def game_over(screen, final_length):
+    # screen.fill((0, 0, 0))  # 清空屏幕
+    font = game_font
+    
+    game_over_text = font.render("游戏结束！", True, (255, 255, 255))
+    length_text = font.render(f"蛇的最终长度：{final_length}", True, (255, 255, 255))
+    
+    screen.blit(game_over_text, (width // 2 - game_over_text.get_width() // 2, height // 2 - 20))
+    screen.blit(length_text, (width // 2 - length_text.get_width() // 2, height // 2 + 20))
+    
+    pygame.display.flip()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
